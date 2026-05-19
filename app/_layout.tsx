@@ -15,8 +15,25 @@ export default function RootLayout() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
+        {/* Main tab navigator — no header, tabs handle their own chrome */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+        {/* Modal screen */}
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+
+        {/* Cheat screen — pushed as a Stack screen so the back button
+            works automatically on both iOS (header + swipe) and Android
+            (hardware back button). */}
+        <Stack.Screen
+          name="cheat"
+          options={{
+            title: 'Cheat Mode',
+            headerStyle: { backgroundColor: '#0D0D1A' },
+            headerTintColor: '#FFCB05',
+            headerTitleStyle: { fontWeight: 'bold' },
+            headerBackTitle: 'Quiz',
+          }}
+        />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
