@@ -1,10 +1,8 @@
 import { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
-
-// ─── Colors (shared palette) ─────────────────────────────────────────────────
 
 const C = {
   bg: '#0D0D1A',
@@ -18,28 +16,20 @@ const C = {
   purple: '#6C3483',
 };
 
-// ─── Component ───────────────────────────────────────────────────────────────
-
 export default function CheatScreen() {
-  // revealed tracks whether the user has pressed "Show Answer"
   const [revealed, setRevealed] = useState(false);
-
-  // useLocalSearchParams reads the params that were passed via router.push
   const { answer } = useLocalSearchParams<{ answer: string }>();
 
-  // The answer param arrives as a string ("true" or "false"), so we convert it
   const isTrue = answer === 'true';
   const correctAnswer = isTrue ? 'TRUE' : 'FALSE';
 
   return (
     <SafeAreaView style={styles.container} edges={['bottom', 'left', 'right']}>
       <Text style={styles.title}>Cheat Mode</Text>
-      <Text style={styles.subtitle}>Shhh... no one will know 👀</Text>
+      <Text style={styles.subtitle}>Shhh... how will they know 👀</Text>
 
-      {/* ── Answer Display ── */}
       <View style={styles.answerContainer}>
         {revealed ? (
-          // Show the answer once the button has been pressed
           <>
             <Text style={styles.revealedLabel}>The correct answer is:</Text>
             <View style={[styles.answerBadge, isTrue ? styles.trueBadge : styles.falseBadge]}>
@@ -52,7 +42,6 @@ export default function CheatScreen() {
             </View>
           </>
         ) : (
-          // Hidden state before the button is pressed
           <View style={styles.hiddenContainer}>
             <Text style={styles.hiddenEmoji}>🔒</Text>
             <Text style={styles.hiddenText}>Answer Hidden</Text>
@@ -61,22 +50,18 @@ export default function CheatScreen() {
         )}
       </View>
 
-      {/* ── Show Answer Button (only visible before reveal) ── */}
       {!revealed && (
-        <TouchableOpacity
-          style={styles.revealBtn}
+        <Pressable
+          style={({ pressed }) => [styles.revealBtn, { opacity: pressed ? 0.8 : 1 }]}
           onPress={() => setRevealed(true)}
-          activeOpacity={0.8}
         >
           <Ionicons name="eye-outline" size={22} color={C.white} />
           <Text style={styles.revealBtnText}>Show Answer</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
     </SafeAreaView>
   );
 }
-
-// ─── Styles ──────────────────────────────────────────────────────────────────
 
 const styles = StyleSheet.create({
   container: {
@@ -86,7 +71,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
   },
-
   title: {
     fontSize: 34,
     fontWeight: 'bold',
@@ -99,8 +83,6 @@ const styles = StyleSheet.create({
     color: C.muted,
     marginBottom: 52,
   },
-
-  // Answer area
   answerContainer: {
     width: '100%',
     alignItems: 'center',
@@ -139,8 +121,6 @@ const styles = StyleSheet.create({
     color: C.white,
     letterSpacing: 3,
   },
-
-  // Hidden state circle
   hiddenContainer: {
     width: 200,
     height: 200,
@@ -166,8 +146,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 20,
   },
-
-  // Reveal button
   revealBtn: {
     flexDirection: 'row',
     alignItems: 'center',
