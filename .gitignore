@@ -41,3 +41,10 @@ app-example
 # generated native folders
 /ios
 /android
+
+# IDE
+.idea/
+
+# Android SDK binaries (shouldn't be in project root)
+adb
+adb.exe
